@@ -1,9 +1,6 @@
 package com.api.reports;
-import java.io.IOException;
-
 import com.api.base.DriverScript;
 import com.api.reports.ExtentManager;
-import com.api.utilities.Util;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
@@ -70,13 +67,13 @@ public class ReportUtil extends ExtentManager{
 		
 	public static void markPassed(String comment){
 		if(DriverScript.continueRun) {
-			if(test==null){
+			if(test == null){
 				test = report.startTest(DriverScript.testCaseName);
 			}
 			try{
 				test.log(LogStatus.PASS, reportStepPassed(comment));
 			}finally{
-				if(report!=null){
+				if(report != null){
 					report.endTest(test);
 	        		report.flush();
 				}
@@ -86,13 +83,13 @@ public class ReportUtil extends ExtentManager{
 	
 	public static void markFailed(String comment){
 		if(DriverScript.continueRun) {
-			if(test==null){
+			if(test == null){
 				test = report.startTest(DriverScript.testCaseName);
 			}
 			try{
 				test.log(LogStatus.FAIL, reportStepFailed(comment));
 			}finally{
-				if(report!=null){
+				if(report != null){
 					report.endTest(test);
 	        		report.flush();
 				}
@@ -102,7 +99,7 @@ public class ReportUtil extends ExtentManager{
 	
 	
 	public static void markInfo(String comment){
-		if(test==null){
+		if(test == null){
 			test = report.startTest(DriverScript.testCaseName);
 		}
 		try{
@@ -119,7 +116,7 @@ public class ReportUtil extends ExtentManager{
 				test.log(LogStatus.INFO, reportStepInfo(comment));
 			}
 		}finally{
-			if(report!=null){
+			if(report != null){
 				report.endTest(test);
         		report.flush();
 			}
@@ -129,13 +126,13 @@ public class ReportUtil extends ExtentManager{
 	
 	public static void markWarning(String comment){
 		if(DriverScript.continueRun) {
-			if(test==null){
+			if(test == null){
 				test = report.startTest(DriverScript.testCaseName);
 			}
 			try{
 				test.log(LogStatus.WARNING, reportStepWarning(comment));
 			}finally{
-				if(report!=null){
+				if(report != null){
 					report.endTest(test);
 	        		report.flush();
 				}
@@ -145,13 +142,13 @@ public class ReportUtil extends ExtentManager{
 	
 	
 	public static void markSkip(String comment){
-		if(test==null){
+		if(test == null){
 			test = report.startTest(DriverScript.testCaseName);
 		}
 		try{
 			test.log(LogStatus.SKIP, reportStepSkip(comment));
 		}finally{
-			if(report!=null){
+			if(report != null){
 				report.endTest(test);
         		report.flush();
 			}
@@ -160,13 +157,13 @@ public class ReportUtil extends ExtentManager{
 	
 	
 	public static void markStart(){
-		if(test==null){
+		if(test == null){
 			test = report.startTest(DriverScript.testCaseName);
 		}
 		try{
 			test=null;
 		}finally{
-			if(report!=null){
+			if(report != null){
 				report.endTest(test);
         		report.flush();
 			}

@@ -30,7 +30,7 @@ public class DriverScript{
 	public static String testCaseId, testType;
 	public static boolean continueRun = false;
 	public static int maxTimeOut = 0;
-	public static String URI;
+	public static String baseURL = null;
 	
 	static TreeMap<Integer,String> executableTCIndex=new TreeMap<Integer,String>();
 	public static int getRowNumForExecutableTestCases() {
@@ -45,7 +45,7 @@ public class DriverScript{
 	}
 	
 	public static boolean isTestCaseRunnable(String tcId){
-		boolean isTestCaseRunnable=false;
+		boolean isTestCaseRunnable = false;
 		continueRun = false;
 		rowNumController = xlsController.getCellRowNum(Constants.TEST_DATA, Constants.TEST_CASE_ID, tcId);
 		rowNum = rowNumController;
@@ -54,29 +54,21 @@ public class DriverScript{
 		testType = xlsController.getCellData(Constants.TEST_DATA, "TestType", rowNum);
 		if(xlsController.getCellData(Constants.TEST_DATA, Constants.TEST_CASE_RUNMODE, rowNum).equalsIgnoreCase(Constants.TEST_CASE_RUNMODE_YES)) {	
 			try {
-				URI = Util.getProperty("URL");
+				continueRun = true;
+				baseURL = Util.getProperty("URL");
+				xls = new Xls_Reader(TEST_DATA_PATH + File.separator + "api_data.xlsx");
+				isTestCaseRunnable = true; 
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}else{
 			System.out.println("Please check the runmode of TestCaseID '" + testCaseId + "'");
-			isTestCaseRunnable= false;
+			isTestCaseRunnable = false;
 		}
 		return isTestCaseRunnable;
 	}
 			
 	public static final int countOfExecutableTestCases = getRowNumForExecutableTestCases();
-		
-		
-	public static int getMaxTimeOut () {
-		int maxTimeOut;
-		try{
-			maxTimeOut = Integer.parseInt(Util.getProperty("MaxTimeOut"));
-		}catch (Throwable t) {
-			maxTimeOut = 2;
-		}
-		return maxTimeOut;
-	}
 		
 	public static String getTestDataSheetName(){
 		String testDataSheet=xlsController.getCellData(Constants.TEST_DATA, Constants.TEST_DATA_SHEET_NAME, rowNum);
