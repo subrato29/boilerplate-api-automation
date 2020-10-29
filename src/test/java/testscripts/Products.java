@@ -18,8 +18,8 @@ public class Products extends DriverScript{
 	public void TC001() {
 		if(isTestCaseRunnable("TC001")) {
 			String baseURI = xls.getCellData(Constants.TEST_DATA, "URI", rowNum);
-			RequestSpecification httpRequest = RestAssured.given();
-			Response response = httpRequest.get(baseURI);
+			RequestSpecification request = RestAssured.given();
+			Response response = request.get(baseURI);
 			
 			String expectedStatusCode = xls.getCellData(Constants.TEST_DATA, "StatusCode", rowNum);
 			String actualStatusCode = String.valueOf(response.getStatusCode());
