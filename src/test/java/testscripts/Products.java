@@ -132,12 +132,20 @@ public class Products extends DriverScript{
 					.when()
 						.delete(baseURI_POST);
 			int actualResponseCode = response.getStatusCode();
-			
-			if (actualResponseCode == Integer.parseInt(expectedResponseCode)) {
-				ReportUtil.markPassed("DELETE of record is successful");
+			if (actualResponseCode == 200) {
+				response = 
+						given()
+						.when()
+							.delete(baseURI_POST);
+				actualResponseCode = response.getStatusCode();
+				if (actualResponseCode == Integer.parseInt(expectedResponseCode)) {
+					ReportUtil.markPassed("DELETE of record is successful");
+				} else {
+					ReportUtil.markFailed("DELETE is not successful where actual response code: " + actualResponseCode
+							+ " where expected reponse code: " + expectedResponseCode);
+				}
 			} else {
-				ReportUtil.markFailed("DELETE is not successful where actual response code: " + actualResponseCode
-						+ " where expected reponse code: " + expectedResponseCode);
+				ReportUtil.markFailed("DELETE is not successful becuase the response code: " + actualResponseCode);
 			}
 		}
 	}
