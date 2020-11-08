@@ -30,7 +30,7 @@ public class DriverScript{
 	public static String testCaseId, testType;
 	public static boolean continueRun = false;
 	public static int maxTimeOut = 0;
-	public static String baseURL = null;
+	public static String baseURI = null, baseURI_POST = null;
 	
 	static TreeMap<Integer,String> executableTCIndex=new TreeMap<Integer,String>();
 	public static int getRowNumForExecutableTestCases() {
@@ -53,14 +53,10 @@ public class DriverScript{
 		testCaseName = xlsController.getCellData(Constants.TEST_DATA, Constants.TEST_CASE_NAME, rowNum);
 		testType = xlsController.getCellData(Constants.TEST_DATA, "TestType", rowNum);
 		if(xlsController.getCellData(Constants.TEST_DATA, Constants.TEST_CASE_RUNMODE, rowNum).equalsIgnoreCase(Constants.TEST_CASE_RUNMODE_YES)) {	
-			try {
-				continueRun = true;
-				baseURL = Util.getProperty("URL");
-				xls = new Xls_Reader(TEST_DATA_PATH + File.separator + "api_data.xlsx");
-				isTestCaseRunnable = true; 
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			continueRun = true;
+			xls = new Xls_Reader(TEST_DATA_PATH + File.separator + "api_data.xlsx");
+			baseURI = xls.getCellData(Constants.TEST_DATA, "URI", rowNum);
+			isTestCaseRunnable = true;
 		}else{
 			System.out.println("Please check the runmode of TestCaseID '" + testCaseId + "'");
 			isTestCaseRunnable = false;
