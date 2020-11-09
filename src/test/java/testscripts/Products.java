@@ -111,7 +111,7 @@ public class Products extends DriverScript{
 			
 			if (actualReponseCode == Integer.parseInt(expectedResponseCode)) {
 				JsonPath jsonPathEvaluator = response.jsonPath();			    
-				ReportUtil.markPassed("Record updated successfully by put"
+				ReportUtil.markPassed("Record id: "+ jsonPathEvaluator.get("id") +" is updated successfully by put"
 										+ " where updated name: " + jsonPathEvaluator.get("name")
 										+ " and updated price: " + jsonPathEvaluator.get("price"));
 			} else {
@@ -127,10 +127,17 @@ public class Products extends DriverScript{
 		String tcid = "TC004";
 		if (isTestCaseRunnable(tcid)) {
 			String expectedResponseCode = xls.getCellData(TEST_DATA, "ResponseCode", rowNum);
-			Response response = 
+			
+			RequestSpecification request = RestAssured.given();
+			Response response = request.get(baseURI_POST);
+			JsonPath jsonPathEvaluator = response.jsonPath();
+			String recordId = String.valueOf(jsonPathEvaluator.get("id"));
+			
+			response = 
 					given()
 					.when()
 						.delete(baseURI_POST);
+			
 			int actualResponseCode = response.getStatusCode();
 			if (actualResponseCode == 200) {
 				response = 
@@ -139,7 +146,7 @@ public class Products extends DriverScript{
 							.delete(baseURI_POST);
 				actualResponseCode = response.getStatusCode();
 				if (actualResponseCode == Integer.parseInt(expectedResponseCode)) {
-					ReportUtil.markPassed("DELETE of record is successful");
+					ReportUtil.markPassed("DELETE of record is successful where record id: " + recordId);
 				} else {
 					ReportUtil.markFailed("DELETE is not successful where actual response code: " + actualResponseCode
 							+ " where expected reponse code: " + expectedResponseCode);
