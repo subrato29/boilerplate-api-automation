@@ -1,19 +1,12 @@
 package testscripts;
 
-import org.json.simple.JSONObject;
 import org.testng.annotations.Test;
-
 import com.api.base.DriverScript;
 import com.api.lib.API_Util;
 import com.api.reports.ReportUtil;
 import com.api.utilities.Constants;
-
-import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
-
-import static io.restassured.RestAssured.*;
 
 public class Products_1 extends DriverScript{
 	
@@ -36,7 +29,7 @@ public class Products_1 extends DriverScript{
 		}			
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	@Test
 	public void TC002 () {
 		String tcId = "TC002";
@@ -55,7 +48,7 @@ public class Products_1 extends DriverScript{
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	@Test
 	public void TC003() {
 		String tcId = "TC003";
