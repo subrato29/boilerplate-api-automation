@@ -1,14 +1,13 @@
 package testscripts;
 
 import org.testng.annotations.Test;
-import com.api.base.DriverScript;
 import com.api.lib.API_Util;
 import com.api.reports.ReportUtil;
 import com.api.utilities.Constants;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
-public class Products_1 extends DriverScript{
+public class Products_1 extends API_Util{
 	
 	String TEST_DATA = Constants.TEST_DATA;
 	
@@ -16,7 +15,7 @@ public class Products_1 extends DriverScript{
 	public void TC001 () {
 		String tcId = "TC001";
 		if(isTestCaseRunnable(tcId)) {
-			int actualStatusCode = API_Util.get(baseURI).getStatusCode();
+			int actualStatusCode = get(baseURI).getStatusCode();
 			int expectedStatusCode = Integer.parseInt(xls.getCellData(TEST_DATA, "ResponseCode", rowNum));
 			
 			if(expectedStatusCode == actualStatusCode) {
@@ -35,7 +34,7 @@ public class Products_1 extends DriverScript{
 		String tcId = "TC002";
 		if (isTestCaseRunnable(tcId)) {
 			int expectedResponseCode = Integer.parseInt(xls.getCellData(TEST_DATA, "ResponseCode", rowNum));
-			Response response = API_Util.post();
+			Response response = post();
 			int actualResponseCode = response.getStatusCode();
 			
 			if (actualResponseCode == expectedResponseCode) {
@@ -53,7 +52,7 @@ public class Products_1 extends DriverScript{
 	public void TC003() {
 		String tcId = "TC003";
 		if (isTestCaseRunnable (tcId)) {
-			Response response = API_Util.put(baseURI_POST);
+			Response response = put(baseURI_POST);
 			
 			int expectedResponseCode = Integer.parseInt(xls.getCellData(TEST_DATA, "ResponseCode", rowNum));
 			int actualReponseCode = response.getStatusCode();
@@ -75,16 +74,16 @@ public class Products_1 extends DriverScript{
 	public void TC004() {
 		String tcid = "TC004";
 		if (isTestCaseRunnable(tcid)) {
-			JsonPath jsonPathEvaluator = API_Util.get(baseURI_POST).jsonPath();
+			JsonPath jsonPathEvaluator = get(baseURI_POST).jsonPath();
 			String recordId = String.valueOf(jsonPathEvaluator.get("id"));
 			
-			Response response = API_Util.delete(baseURI_POST);
+			Response response = delete(baseURI_POST);
 			
 			int expectedResponseCode = Integer.parseInt(xls.getCellData(TEST_DATA, "ResponseCode", rowNum));
 			int actualResponseCode = response.getStatusCode();
 			
 			if (actualResponseCode == 200) {
-				actualResponseCode = API_Util.delete(baseURI_POST).getStatusCode();
+				actualResponseCode = delete(baseURI_POST).getStatusCode();
 				if (actualResponseCode == expectedResponseCode) {
 					ReportUtil.markPassed("DELETE of record is successful where record id: " + recordId);
 				} else {
