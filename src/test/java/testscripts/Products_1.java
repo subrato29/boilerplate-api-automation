@@ -1,13 +1,19 @@
 package testscripts;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.simple.JSONObject;
 import org.testng.annotations.Test;
-import com.api.lib.API_Util;
+
+import com.api.lib.Api_Utils;
+import com.api.lib.Http_Methods;
 import com.api.reports.ReportUtil;
 import com.api.utilities.Constants;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
-public class Products_1 extends API_Util{
+public class Products_1 extends Http_Methods{
 	
 	String TEST_DATA = Constants.TEST_DATA;
 	
@@ -34,7 +40,8 @@ public class Products_1 extends API_Util{
 		String tcId = "TC002";
 		if (isTestCaseRunnable(tcId)) {
 			int expectedResponseCode = Integer.parseInt(xls.getCellData(TEST_DATA, "ResponseCode", rowNum));
-			Response response = post();
+			String request = xls.getCellData(TEST_DATA, "RequestBody", rowNum);
+			Response response = post(request);
 			int actualResponseCode = response.getStatusCode();
 			
 			if (actualResponseCode == expectedResponseCode) {
@@ -43,7 +50,10 @@ public class Products_1 extends API_Util{
 			} else {
 				ReportUtil.markFailed("POST is not successful where actual response code: " + actualResponseCode
 									+ " where expected reponse code: " + expectedResponseCode);
-			}			
+			}
+			String responseBody = xls.getCellData(TEST_DATA, "RequestBody", rowNum);
+			Api_Utils.validateReponsePayload(responseBody, baseURI_POST);
+			Api_Utils.validateReponseHeader(baseURI_POST, response);
 		}
 	}
 	
@@ -52,7 +62,8 @@ public class Products_1 extends API_Util{
 	public void TC003() {
 		String tcId = "TC003";
 		if (isTestCaseRunnable (tcId)) {
-			Response response = put(baseURI_POST);
+			String request = xls.getCellData(TEST_DATA, "RequestBody", rowNum);
+			Response response = put(baseURI_POST, request);
 			
 			int expectedResponseCode = Integer.parseInt(xls.getCellData(TEST_DATA, "ResponseCode", rowNum));
 			int actualReponseCode = response.getStatusCode();
@@ -75,7 +86,8 @@ public class Products_1 extends API_Util{
 		String tcid = "TC004";
 		if (isTestCaseRunnable(tcid)) {
 			String baseURI = xls.getCellData(TEST_DATA, "URI", rowNum);
-			Response response = patch(baseURI);
+			String request = xls.getCellData(TEST_DATA, "RequestBody", rowNum);
+			Response response = patch(baseURI, request);
 			
 			int expectedResponseCode = Integer.parseInt(xls.getCellData(TEST_DATA, "ResponseCode", rowNum));
 			int actualReponseCode = response.getStatusCode();

@@ -83,16 +83,16 @@ public class DriverScript{
 	}
     
 		
-    	@AfterClass()
-    	public void afterClass() throws IOException{
-    		Util.openHTMLReport();
-			Zip.zipFile();
-    	}
-    	
-    	
-    	@BeforeClass()
-    	public void init() throws IOException {
-    		
-    	}
-    	
+	@AfterClass()
+	public void afterClass() throws IOException{
+		Util.openHTMLReport();
+		Zip.zipFile();
 	}
+	
+	
+	@BeforeClass()
+	public void init() throws IOException {
+		
+	}
+    	
+}

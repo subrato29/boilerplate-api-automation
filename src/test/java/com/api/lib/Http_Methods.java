@@ -1,18 +1,15 @@
 package com.api.lib;
 
 import static io.restassured.RestAssured.given;
-
 import org.json.simple.JSONObject;
-
 import com.api.base.DriverScript;
 import com.api.utilities.Constants;
-
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
-public class API_Util extends DriverScript{
+public class Http_Methods extends DriverScript{
 	static String TEST_DATA = Constants.TEST_DATA;
 	
 	/**
@@ -34,8 +31,8 @@ public class API_Util extends DriverScript{
 	 * @return responseCode
 	 */
 	@SuppressWarnings("unchecked")
-	public static Response post () {
-		String[] arrPost = xls.getCellData(TEST_DATA, "RequestBody", rowNum).split(",");
+	public static Response post (String request) {
+		String[] arrPost = request.split(",");
 		JSONObject json = new JSONObject();
 		String key, value;
 		for (int i = 0; i < arrPost.length; i++) {
@@ -65,8 +62,8 @@ public class API_Util extends DriverScript{
 	 * @return responseCode
 	 */
 	@SuppressWarnings("unchecked")
-	public static Response put (String URI) {
-		String[] arrPost = xls.getCellData(TEST_DATA, "RequestBody", rowNum).split(",");
+	public static Response put (String URI, String request) {
+		String[] arrPost = request.split(",");
 		JSONObject json = new JSONObject();
 		String key, value;
 		for (int i = 0; i < arrPost.length; i++) {
@@ -112,8 +109,8 @@ public class API_Util extends DriverScript{
 	 * @return responseCode
 	 */
 	@SuppressWarnings("unchecked")
-	public static Response patch (String URI) {
-		String[] arrPost = xls.getCellData(TEST_DATA, "RequestBody", rowNum).split(",");
+	public static Response patch (String URI, String request) {
+		String[] arrPost = request.split(",");
 		JSONObject json = new JSONObject();
 		String key, value;
 		for (int i = 0; i < arrPost.length; i++) {
