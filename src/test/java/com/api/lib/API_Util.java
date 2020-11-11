@@ -104,4 +104,33 @@ public class API_Util extends DriverScript{
 					.delete(URI);
 		return response;
 	}
+	
+	/**
+	 * Keyword: patch
+	 * Author: Subrato Sarkar
+	 * Date: 11/10/2020
+	 * @return responseCode
+	 */
+	@SuppressWarnings("unchecked")
+	public static Response patch (String URI) {
+		String[] arrPost = xls.getCellData(TEST_DATA, "RequestBody", rowNum).split(",");
+		JSONObject json = new JSONObject();
+		String key, value;
+		for (int i = 0; i < arrPost.length; i++) {
+			key = arrPost[i].split(":")[0].trim();
+			value = arrPost[i].split(":")[1].trim();
+			if (key.toUpperCase().equals("PRICE") || key.toUpperCase().equals("SHIPPING")) {
+				json.put(key.toLowerCase(), Integer.parseInt(value));
+			} else {
+				json.put(key.toLowerCase(), value);
+			}
+		}
+		Response response = 
+				given()
+					.contentType("application/json")
+					.body(json)
+				.when()
+					.patch(URI);
+		return response;
+	}
 }

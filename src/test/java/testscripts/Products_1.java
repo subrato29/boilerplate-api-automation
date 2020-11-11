@@ -63,7 +63,7 @@ public class Products_1 extends API_Util{
 										+ " where updated name: " + jsonPathEvaluator.get("name")
 										+ " and updated price: " + jsonPathEvaluator.get("price"));
 			} else {
-				ReportUtil.markFailed("PUT is not successful where cctual response code: " + actualReponseCode
+				ReportUtil.markFailed("PUT is not successful where actual response code: " + actualReponseCode
 									+ " where expected reponse code: " + expectedResponseCode);
 			}
 			
@@ -71,8 +71,28 @@ public class Products_1 extends API_Util{
 	}
 	
 	@Test
-	public void TC004() {
+	public void TC004 () {
 		String tcid = "TC004";
+		if (isTestCaseRunnable(tcid)) {
+			String baseURI = xls.getCellData(TEST_DATA, "URI", rowNum);
+			Response response = patch(baseURI);
+			
+			int expectedResponseCode = Integer.parseInt(xls.getCellData(TEST_DATA, "ResponseCode", rowNum));
+			int actualReponseCode = response.getStatusCode();
+			
+			if (actualReponseCode == expectedResponseCode) {
+				JsonPath jsonPathEvaluator = response.jsonPath();			    
+				ReportUtil.markPassed("Record id: "+ jsonPathEvaluator.get("id") + response.body().asString());
+			} else {
+				ReportUtil.markFailed("PATCH is not successful where actual response code: " + actualReponseCode
+									+ " where expected reponse code: " + expectedResponseCode);
+			}
+		}
+	}
+	
+	@Test
+	public void TC005() {
+		String tcid = "TC005";
 		if (isTestCaseRunnable(tcid)) {
 			JsonPath jsonPathEvaluator = get(baseURI_POST).jsonPath();
 			String recordId = String.valueOf(jsonPathEvaluator.get("id"));
