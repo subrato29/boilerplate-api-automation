@@ -125,4 +125,42 @@ public class Products_1 extends Http_Methods{
 		}
 	}
 	
+	
+	@Test
+	public void TC006 () {
+		String tcId = "TC006";
+		if (isTestCaseRunnable(tcId)) {
+			Response response = get(baseURI);
+			int actualResponseCode = response.getStatusCode();
+			int expectedResponseCode = Integer.parseInt(xls.getCellData(TEST_DATA, "ResponseCode", rowNum));
+			if (actualResponseCode == expectedResponseCode) {
+				JsonPath jsonPathEval = response.jsonPath();
+				String ids = jsonPathEval.get("categories.id").toString();
+				String names = jsonPathEval.get("categories.name").toString();
+				ReportUtil.markPassed("Categories ids are: " + ids + " and names are " + names);
+			} else {
+				ReportUtil.markFailed("Actual response code: " + actualResponseCode + " while expected response code: " + expectedResponseCode);
+			}
+		}
+	}
+	
+	@Test
+	public void TC007 () {
+		String tcId = "TC007";
+		if (isTestCaseRunnable(tcId)) {
+			Response response = get(baseURI);
+			int actualResponseCode = response.getStatusCode();
+			int expectedResponseCode = Integer.parseInt(xls.getCellData(TEST_DATA, "ResponseCode", rowNum));
+			if (actualResponseCode == expectedResponseCode) {
+				JsonPath jsonPathEval = response.jsonPath();
+				String ids = jsonPathEval.get("data.categories.id").toString();
+				String names = jsonPathEval.get("data.categories.name").toString();
+				ReportUtil.markPassed("Categories ids are: " + ids + " and names are " + names);
+			} else {
+				ReportUtil.markFailed("Actual response code: " + actualResponseCode + " while expected response code: " + expectedResponseCode);
+			}
+		}
+	}
+	
+	
 }
