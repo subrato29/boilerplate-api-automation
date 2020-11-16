@@ -1,9 +1,5 @@
 package testscripts;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.json.simple.JSONObject;
 import org.testng.annotations.Test;
 
 import com.api.lib.Api_Utils;
@@ -21,11 +17,12 @@ public class Products_1 extends Http_Methods{
 	public void TC001 () {
 		String tcId = "TC001";
 		if(isTestCaseRunnable(tcId)) {
-			int actualStatusCode = get(baseURI).getStatusCode();
+			Response response = get(baseURI);
+			int actualStatusCode = response.getStatusCode();
 			int expectedStatusCode = Integer.parseInt(xls.getCellData(TEST_DATA, "ResponseCode", rowNum));
 			
 			if(expectedStatusCode == actualStatusCode) {
-				ReportUtil.markPassed("Status code is correctly verified, which is: " + expectedStatusCode);
+				ReportUtil.markPassed("Status code is correctly verified, which is: " + expectedStatusCode + " having response time " + Api_Utils.getResponseTime(response));
 			} else {
 				ReportUtil.markFailed("Status code is not correctly verified, "
 						+ "where actual is: " + actualStatusCode 

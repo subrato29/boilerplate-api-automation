@@ -51,4 +51,8 @@ public class Api_Utils extends Http_Methods{
 		}
 	}
 	
+	public static long getResponseTime (Response response) {
+		return response.getTime();
+	}
+	
 }
