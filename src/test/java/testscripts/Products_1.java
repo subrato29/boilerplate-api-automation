@@ -1,5 +1,8 @@
 package testscripts;
 
+import static io.restassured.RestAssured.given;
+
+import org.json.simple.JSONObject;
 import org.testng.annotations.Test;
 
 import com.api.lib.Api_Utils;
@@ -162,5 +165,61 @@ public class Products_1 extends Http_Methods{
 		}
 	}
 	
+	@Test
+	public void TC008 () {
+		String tcId = "TC008";
+		if (isTestCaseRunnable(tcId)) {
+			int expectedResponseCode = Integer.parseInt(xls.getCellData(TEST_DATA, "ResponseCode", rowNum));
+			String request = xls.getCellData(TEST_DATA, "RequestBody", rowNum);
+			Response response = post(request);
+			int actualResponseCode = response.getStatusCode();
+			
+			if (actualResponseCode == expectedResponseCode) {
+				ReportUtil.markPassed("POST is not successful as expected where"
+						+ " response code is " + actualResponseCode);
+			} else {
+				ReportUtil.markFailed("Record added successfully which is: "
+						+ response.getBody().asString());
+			}
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void TC009 () {
+		String tcId = "TC009";
+		if (isTestCaseRunnable(tcId)) {
+			String request = xls.getCellData(TEST_DATA, "RequestBody", rowNum);
+			String[] arrPost = request.split(",");
+			JSONObject json = new JSONObject();
+			String key, value;
+			for (int i = 0; i < arrPost.length; i++) {
+				key = arrPost[i].split(":")[0].trim();
+				value = arrPost[i].split(":")[1].trim();
+				if (key.toUpperCase().equals("SHIPPING")) {
+					json.put(key.toLowerCase(), Integer.parseInt(value));
+				} else {
+					json.put(key.toLowerCase(), value);
+				}
+			}
+			Response response = 
+					given()
+						.contentType("application/json")
+						.body(json)
+					.when()
+						.post(baseURI);
+			
+			int expectedResponseCode = Integer.parseInt(xls.getCellData(TEST_DATA, "ResponseCode", rowNum));
+			int actualResponseCode = response.getStatusCode();
+			
+			if (actualResponseCode == expectedResponseCode) {
+				ReportUtil.markPassed("POST is not successful as expected where"
+						+ " response code is " + actualResponseCode);
+			} else {
+				ReportUtil.markFailed("Record added successfully which is: "
+						+ response.getBody().asString());
+			}
+		}
+	}
 	
 }

@@ -3,6 +3,7 @@ package com.api.lib;
 import static io.restassured.RestAssured.given;
 import org.json.simple.JSONObject;
 import com.api.base.DriverScript;
+import com.api.reports.ReportUtil;
 import com.api.utilities.Constants;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
@@ -32,27 +33,33 @@ public class Http_Methods extends DriverScript{
 	 */
 	@SuppressWarnings("unchecked")
 	public static Response post (String request) {
-		String[] arrPost = request.split(",");
-		JSONObject json = new JSONObject();
-		String key, value;
-		for (int i = 0; i < arrPost.length; i++) {
-			key = arrPost[i].split(":")[0].trim();
-			value = arrPost[i].split(":")[1].trim();
-			if (key.toUpperCase().equals("PRICE") || key.toUpperCase().equals("SHIPPING")) {
-				json.put(key.toLowerCase(), Integer.parseInt(value));
-			} else {
-				json.put(key.toLowerCase(), value);
+		try {
+			String[] arrPost = request.split(",");
+			JSONObject json = new JSONObject();
+			String key, value;
+			for (int i = 0; i < arrPost.length; i++) {
+				key = arrPost[i].split(":")[0].trim();
+				value = arrPost[i].split(":")[1].trim();
+				if (key.toUpperCase().equals("PRICE") || key.toUpperCase().equals("SHIPPING")) {
+					json.put(key.toLowerCase(), Integer.parseInt(value));
+				} else {
+					json.put(key.toLowerCase(), value);
+				}
 			}
+			Response response = 
+					given()
+						.contentType("application/json")
+						.body(json)
+					.when()
+						.post(baseURI);
+			JsonPath jsonPathEvaluator = response.jsonPath(); 
+			baseURI_POST = "http://localhost:3030/products/" + jsonPathEvaluator.get("id");
+			return response;
+		} catch (Throwable t) {
+			ReportUtil.markFailed("POST method is failed");
+			t.printStackTrace();
+			return null;
 		}
-		Response response = 
-				given()
-					.contentType("application/json")
-					.body(json)
-				.when()
-					.post(baseURI);
-		JsonPath jsonPathEvaluator = response.jsonPath(); 
-		baseURI_POST = "http://localhost:3030/products/" + jsonPathEvaluator.get("id");
-		return response;
 	}
 	
 	/**
@@ -63,27 +70,33 @@ public class Http_Methods extends DriverScript{
 	 */
 	@SuppressWarnings("unchecked")
 	public static Response put (String URI, String request) {
-		String[] arrPost = request.split(",");
-		JSONObject json = new JSONObject();
-		String key, value;
-		for (int i = 0; i < arrPost.length; i++) {
-			key = arrPost[i].split(":")[0].trim();
-			value = arrPost[i].split(":")[1].trim();
-			if (key.toUpperCase().equals("PRICE") || key.toUpperCase().equals("SHIPPING")) {
-				json.put(key.toLowerCase(), Integer.parseInt(value));
-			} else {
-				json.put(key.toLowerCase(), value);
-			}
-		}	
-		Response response = 
-				given()
-					.contentType("application/json")
-					.body(json)
-				.when()
-					.put(URI);
-		JsonPath jsonPathEvaluator = response.jsonPath(); 
-		baseURI_POST = "http://localhost:3030/products/" + jsonPathEvaluator.get("id");
-		return response;
+		try {
+			String[] arrPost = request.split(",");
+			JSONObject json = new JSONObject();
+			String key, value;
+			for (int i = 0; i < arrPost.length; i++) {
+				key = arrPost[i].split(":")[0].trim();
+				value = arrPost[i].split(":")[1].trim();
+				if (key.toUpperCase().equals("PRICE") || key.toUpperCase().equals("SHIPPING")) {
+					json.put(key.toLowerCase(), Integer.parseInt(value));
+				} else {
+					json.put(key.toLowerCase(), value);
+				}
+			}	
+			Response response = 
+					given()
+						.contentType("application/json")
+						.body(json)
+					.when()
+						.put(URI);
+			JsonPath jsonPathEvaluator = response.jsonPath(); 
+			baseURI_POST = "http://localhost:3030/products/" + jsonPathEvaluator.get("id");
+			return response;
+		} catch (Throwable t) {
+			ReportUtil.markFailed("PUT command is failed");
+			t.printStackTrace();
+			return null;
+		}
 	}
 	
 	/**
