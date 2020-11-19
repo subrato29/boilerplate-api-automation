@@ -222,4 +222,65 @@ public class Products_1 extends Http_Methods{
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void TC0010 () {
+		String tcId = "TC010";
+		if (isTestCaseRunnable(tcId)) {
+			String request = xls.getCellData(TEST_DATA, "RequestBody", rowNum);
+			String[] arrPost = request.split(",");
+			JSONObject json = new JSONObject();
+			String key, value;
+			for (int i = 0; i < arrPost.length; i++) {
+				key = arrPost[i].split(":")[0].trim();
+				value = arrPost[i].split(":")[1].trim();
+				if (key.toUpperCase().equals("PRICE")) {
+					json.put(key.toLowerCase(), Double.parseDouble(value));
+				} else if (key.toUpperCase().equals("SHIPPING")) {
+					json.put(key.toLowerCase(), Integer.parseInt(value));
+				} else {
+					json.put(key.toLowerCase(), value);
+				}
+			}
+			Response response = 
+					given()
+						.contentType("application/json")
+						.body(json)
+					.when()
+						.post(baseURI);
+			int expectedResponseCode = Integer.parseInt(xls.getCellData(TEST_DATA, "ResponseCode", rowNum));
+			int actualResponseCode = response.getStatusCode();
+			
+			if (actualResponseCode == expectedResponseCode) {
+				ReportUtil.markPassed("POST is not successful as expected where"
+						+ " response code is " + actualResponseCode);
+			} else {
+				ReportUtil.markFailed("Record added successfully which is: "
+						+ response.getBody().asString());
+			}
+		}
+	}
+	
+	@Test
+	public void TC011 () {
+		String tcId = "TC011";
+		if (isTestCaseRunnable(tcId)) {
+			String request = xls.getCellData(TEST_DATA, "RequestBody", rowNum);
+			Response response = post(request);
+			int expectedResponseCode = Integer.parseInt(xls.getCellData(TEST_DATA, "ResponseCode", rowNum));
+			int actualResponseCode = response.getStatusCode();
+			
+			if (actualResponseCode == expectedResponseCode) {
+				ReportUtil.markPassed("POST is not successful as expected where"
+						+ " response code is " + actualResponseCode);
+			} else {
+				ReportUtil.markFailed("Record added successfully which is: "
+						+ response.getBody().asString());
+				String responseBody = xls.getCellData(TEST_DATA, "RequestBody", rowNum);
+				Api_Utils.validateReponsePayload(responseBody, baseURI_POST);
+				Api_Utils.validateReponseHeader(baseURI_POST, response);
+			}
+		}
+	}
+	
 }
